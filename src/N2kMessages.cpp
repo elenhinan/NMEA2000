@@ -787,6 +787,25 @@ bool ParseN2kPgn129539(const tN2kMsg& N2kMsg, unsigned char& SID, tN2kGNSSDOPmod
 }
 
 //*****************************************************************************
+// GNSS Sats in View
+void SetN2kPGN129540(tN2kMsg &N2kMsg, unsigned char SID, unsigned char SatsInView) {
+    N2kMsg.SetPGN(129540L);
+    N2kMsg.Priority = 6;
+    N2kMsg.AddByte(SID);
+    N2kMsg.AddByte(3); // mode, 3= Range residuals
+    N2kMsg.AddByte(SatsInView);
+};
+void AppendN2kPGN129540(tN2kMsg &N2kMsg, unsigned char PRN, double Elevation, double Azimuth, double SNR,
+                        double RangeRes, unsigned char Status) {
+    N2kMsg.AddByte(PRN);
+    N2kMsg.Add2ByteDouble(Elevation, 0.0001);
+    N2kMsg.Add2ByteDouble(Azimuth, 0.0001);
+    N2kMsg.Add2ByteDouble(SNR, 0.001);
+    N2kMsg.Add4ByteDouble(RangeRes, 0.0001);
+    N2kMsg.AddByte(Status);
+}
+
+//*****************************************************************************
 // AIS position report (class A 129038)
 // Latitude and Longitude in degrees (1e7)
 // COG and Heading in radians (1e4)

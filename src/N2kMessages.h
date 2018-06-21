@@ -97,6 +97,15 @@ enum tN2kGNSSDOPmode {
                             N2kGNSSdm_Error,
                           };
 
+enum tN2kSatelliteFlag {
+                            N2kSFNotTracked = 0,
+                            N2kSFTracked = 1,
+                            N2kSFUsed = 2,
+                            N2kSFNotTrackedDiff = 3,
+                            N2kSFTrackedDiff = 4,
+                            N2kSFUsedDiff = 5,
+                          };
+
 enum tN2kTempSource {
                             N2kts_SeaTemperature=0,
                             N2kts_OutsideTemperature=1,
@@ -1006,6 +1015,24 @@ inline bool ParseN2kGNSSDOPData(const tN2kMsg& N2kMsg, unsigned char& SID, tN2kG
 {
     return ParseN2kPgn129539(N2kMsg, SID, DesiredMode, ActualMode, HDOP, VDOP, TDOP);
 }
+
+//*****************************************************************************
+// GNSS Sats in View
+// Input:
+//  - SID                   Sequence ID. If your device is e.g. boat speed and GPS at same time, you can set same SID for different messages
+//                          to indicate that they are measured at same time.
+//  - Sats in view
+// Input Append
+//  - PRN
+//  - elevation             radians
+//  - azimuth               radians
+//  - snr                   db/hz
+//  - residuals             m ?
+//  - status                tSatellite
+
+void SetN2kPGN129540(tN2kMsg &N2kMsg, unsigned char SID, unsigned char SatsInView);
+void AppendN2kPGN129540(tN2kMsg &N2kMsg, unsigned char PRN, double Elevation, double Azimuth, double SNR,
+                        double RangeRes, unsigned char Status);
 
 //*****************************************************************************
 // AIS position reports for Class A
