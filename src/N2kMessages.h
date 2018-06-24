@@ -907,6 +907,10 @@ inline bool ParseN2kCOGSOGRapid(const tN2kMsg &N2kMsg, unsigned char &SID, tN2kH
 // Input:
 //  - SID                   Sequence ID. If your device is e.g. boat speed and GPS at same time, you can set same SID for different messages
 //                          to indicate that they are measured at same time.
+//                          Valid: [0-252]
+//                          Reserved: 253
+//                          Out of range: 254
+//                          Not applicable: 255 
 //  - DaysSince1970         Days since 1.1.1970. You can find sample how to convert e.g. NMEA0183 date info to this on my NMEA0183 library on
 //                          NMEA0183Messages.cpp on function NMEA0183ParseRMC_nc
 //  - Latitude              Latitude in degrees
@@ -1023,16 +1027,28 @@ inline bool ParseN2kGNSSDOPData(const tN2kMsg& N2kMsg, unsigned char& SID, tN2kG
 //                          to indicate that they are measured at same time.
 //  - Sats in view
 // Input Append
-//  - PRN
-//  - elevation             radians
-//  - azimuth               radians
-//  - snr                   db/hz
-//  - residuals             m ?
-//  - status                tSatellite
+//  - PRN                   Satellite ID
+//  - elevation             Elevation in radians
+//  - azimuth               Azimuth in radians
+//  - snr                   Signal to noise in db/hz
+//  - residuals             Range residuals in m
+//  - status                Satellite status flags (tSatellite)
 
 void SetN2kPGN129540(tN2kMsg &N2kMsg, unsigned char SID, unsigned char SatsInView);
+
+inline void SetN2kGNSSSatsInView(tN2kMsg& N2kMsg, unsigned char SID, unsigned char SatsInView)
+{
+  SetN2kPGN129540(N2kMsg, SID, SatsInView);
+}
+
 void AppendN2kPGN129540(tN2kMsg &N2kMsg, unsigned char PRN, double Elevation, double Azimuth, double SNR,
                         double RangeRes, unsigned char Status);
+                        
+inline void AppendN2kGNSSSatsInView(tN2kMsg &N2kMsg, unsigned char PRN, double Elevation, double Azimuth, double SNR,
+                        double RangeRes, unsigned char Status)
+{
+AppendN2kPGN129540(N2kMsg, PRN, Elevation, Azimuth, SNR, RangeRes, Status);
+}
 
 //*****************************************************************************
 // AIS position reports for Class A

@@ -761,7 +761,7 @@ void SetN2kPGN129539(tN2kMsg& N2kMsg, unsigned char SID, tN2kGNSSDOPmode Desired
     N2kMsg.SetPGN(129539L);
     N2kMsg.Priority = 6;
     N2kMsg.AddByte(SID);
-    N2kMsg.AddByte(((DesiredMode & 0x07) << 5) | ((ActualMode & 0x07) << 2));
+    N2kMsg.AddByte(((DesiredMode & 0x07) << 3) | ((ActualMode & 0x07) << 0));
     N2kMsg.Add2ByteDouble(HDOP, 0.01);
     N2kMsg.Add2ByteDouble(VDOP, 0.01);
     N2kMsg.Add2ByteDouble(TDOP, 0.01);
